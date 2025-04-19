@@ -42,7 +42,7 @@ export default defineNuxtConfig({
     search_custom_item_title_field: "title",
     search_custom_item_link_field: "link",
     public: {
-      version: "v0.1.0",
+      version: "v0.1.1",
       search_plugin_paperless_ngx_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_PAPERLESS_NGX_ENABLED,
       search_plugin_ttrss_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_TTRSS_ENABLED,
       search_plugin_mealie_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_MEALIE_ENABLED,
