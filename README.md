@@ -1,3 +1,11 @@
+[![Latest Release][latest-release-shield]][latest-release-url]
+[![Contributors][contributors-shield]][contributors-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![AGPL License][license-shield]][license-url]
+[![Docker Pulls][docker-pull]][docker-url]
+[![GHCR Pulls][ghcr-pulls]][ghcr-url]
+
 # <img height="100px" src="./docs/images/homelense.png" />
 
 # 🏠🔍 Homelense
@@ -164,6 +172,5 @@ HomeLense is designed to run locally on your home network. For exposed instances
 
 Contributions welcome! Just fork, create a branch, and PR with your change. For major changes, open an issue first.
 
-## 📄 License
-
-MIT License
+## License
+Distributed under the AGPL License. See LICENSE for more information.
