@@ -2,6 +2,7 @@
 # see all versions at https://hub.docker.com/r/oven/bun/tags
 FROM oven/bun:1 AS build
 WORKDIR /app
+ARG NUXT_PUBLIC_VERSION='0.1.3'
 
 COPY ./app/package.json ./app/bun.lock ./
 
@@ -19,7 +20,7 @@ WORKDIR /app
 
 LABEL org.opencontainers.image.title="homelense"
 LABEL org.opencontainers.image.description="Selfhosted metasearch for other selfhosted applications."
-LABEL org.opencontainers.image.version="0.1.1"
+LABEL org.opencontainers.image.version=${NUXT_PUBLIC_VERSION}
 LABEL org.opencontainers.image.authors="Tobias Mainka <tobi.mainka@me.com>"
 LABEL org.opencontainers.image.licenses="AGPL-3.0"
 LABEL org.opencontainers.image.url="https://github.com/neok0/homelense"
