@@ -1,11 +1,3 @@
-[![Latest Release][latest-release-shield]][latest-release-url]
-[![Contributors][contributors-shield]][contributors-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![AGPL License][license-shield]][license-url]
-[![Docker Pulls][docker-pull]][docker-url]
-[![GHCR Pulls][ghcr-pulls]][ghcr-url]
-
 # <img height="100px" src="./docs/images/homelense.png" />
 
 # 🏠🔍 Homelense
@@ -39,6 +31,7 @@ services:
     ports:
       - 3000:3000
 ```
+See Configuration section below for more details how to configure this app.
 
 ### 🔧 Development
 
@@ -50,7 +43,7 @@ cd app
 bun run dev
 ```
 I'm using bun, you probably can run it via different means as well. Now, point your browser to `localhost:3000`.
-
+When using bun, all environment variables will be automatically read from file if placed in `app/.env`.
 
 ## 📂 Configuration
 
@@ -77,7 +70,7 @@ Currently supported search plugins:
 
 More plugins will be added in future versions.
 
-## Development
+## Plugin Development
 You can create a new plugin in four simple steps:
 1. Add required env variables to `nuxt.config.ts`.
 2. Copy exsting plugin from `app/server/` folder and adjust endpoit logic accordingly.
