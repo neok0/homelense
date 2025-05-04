@@ -20,6 +20,7 @@ const endpoints = reactive([
         isSearched: false,
         icon: "/images/icons/paperless-ngx.svg",
         enabled: config.public.search_plugin_paperless_ngx_enabled,
+        weight: config.public.search_plugin_paperless_ngx_weight,
     },
     {
         title: "Mealie",
@@ -28,6 +29,7 @@ const endpoints = reactive([
         isSearched: false,
         icon: "/images/icons/mealie.svg",
         enabled: config.public.search_plugin_mealie_enabled,
+        weight: config.public.search_plugin_mealie_weight,
     },
     {
         title: "Karakeep",
@@ -36,6 +38,7 @@ const endpoints = reactive([
         isSearched: false,
         icon: "/images/icons/karakeep.svg",
         enabled: config.public.search_plugin_karakeep_enabled,
+        weight: config.public.search_plugin_karakeep_weight,
     },
     {
         title: "Gitea",
@@ -44,6 +47,7 @@ const endpoints = reactive([
         isSearched: false,
         icon: "/images/icons/gitea.svg",
         enabled: config.public.search_plugin_gitea_enabled,
+        weight: config.public.search_plugin_gitea_weight,
     },
     {
         title: "Jellyfin",
@@ -52,6 +56,16 @@ const endpoints = reactive([
         isSearched: false,
         icon: "/images/icons/jellyfin.svg",
         enabled: config.public.search_plugin_jellyfin_enabled,
+        weight: config.public.search_plugin_jellyfin_weight,
+    },
+    {
+        title: "Notion",
+        url: "/api/search/notion",
+        selected: true,
+        isSearched: false,
+        icon: "/images/icons/notion.svg",
+        enabled: config.public.search_plugin_notion_enabled,
+        weight: config.public.search_plugin_notion_weight,
     },
     // {
     //     title: "TTRSS",
@@ -63,8 +77,12 @@ const endpoints = reactive([
     // },
 ]);
 
+// filter disabled global endpoints
 const enabledEndpoints = computed(() => endpoints.filter((endpoint) => endpoint.enabled));
 const searchedEndpoints = computed(() => {
+    // sort endpoints by weight first
+    enabledEndpoints.value.sort((a, b) => b.weight - a.weight);
+    // filter endpoints that are not searched
     return enabledEndpoints.value.filter((item) => item.isSearched);
 });
 
@@ -89,6 +107,11 @@ const expandAll = ref(false);
 
 function toggleAll() {
     expandAll.value = !expandAll.value;
+}
+
+const showEmpty = ref(true);
+function showEmptyResults() {
+    showEmpty.value = !showEmpty.value;
 }
 
 if (props.q) {
@@ -132,7 +155,10 @@ if (props.q) {
 
             <div class="flex items-center gap-2 md:ml-4">
                 <SearchSelection :endpoints="enabledEndpoints" />
-                <SearchResultsOptions @toggleSearchResults="toggleAll()" />
+                <SearchResultsOptions
+                    @toggleSearchResults="toggleAll()"
+                    @toggleSearchResultsShowEmpty="showEmptyResults()"
+                />
             </div>
         </div>
         <SearchResults
@@ -140,6 +166,7 @@ if (props.q) {
             :key="endpoint.title + q"
             :endpoint="endpoint"
             :expanded="expandAll"
+            :showEmpty="showEmpty"
             :q="q"
         ></SearchResults>
     </div>
