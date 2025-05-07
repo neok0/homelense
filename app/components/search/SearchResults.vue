@@ -7,6 +7,7 @@ import { ref, watch } from "vue";
 const props = defineProps<{
     q: string;
     expanded: boolean;
+    showEmpty: boolean;
     endpoint: {
         title: string;
         url: string;
@@ -26,9 +27,12 @@ watch(
 
 const q = ref(props.q);
 const { status, data } = await useFetch(props.endpoint.url, { query: { q: q }, lazy: true });
+
+// toggle to show empty results or not
+const showResults = ref(props.showEmpty);
 </script>
 
-<template v-if="endpoint.isSearched">
+<template v-if="endpoint.isSearched && showEmpty">
     <div class="grid auto-rows-min gap-4 md:grid-cols-1">
         <div class="rounded-xl bg-muted/50 p-4 shadow hover:bg-muted transition-colors">
             <Collapsible v-model:open="isExpanded">

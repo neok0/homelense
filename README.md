@@ -66,6 +66,7 @@ Currently supported search plugins:
 - Jellyfin
 - Karakeep
 - Mealie
+- Notion
 - Custom
 
 More plugins will be added in future versions.

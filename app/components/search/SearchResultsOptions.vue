@@ -20,6 +20,9 @@ import {
             <DropdownMenuItem @click="$emit('toggleSearchResults')">
                 <span>Collaps all</span>
             </DropdownMenuItem>
+            <DropdownMenuItem @click="$emit('toggleSearchResultsShowEmpty')">
+                <span>Show Empty</span>
+            </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
 </template>
