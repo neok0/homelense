@@ -67,14 +67,14 @@ const endpoints = reactive([
         enabled: config.public.search_plugin_notion_enabled,
         weight: config.public.search_plugin_notion_weight,
     },
-    // {
-    //     title: "TTRSS",
-    //     url: "/api/search/ttrss",
-    //     selected: true,
-    //     isSearched: false,
-    //     icon: "/images/icons/tiny-tiny-rss.png",
-    //     enabled: config.public.search_plugin_ttrss_enabled,
-    // },
+    {
+        title: "TTRSS",
+        url: "/api/search/ttrss",
+        selected: true,
+        isSearched: false,
+        icon: "/images/icons/tiny-tiny-rss.png",
+        enabled: config.public.search_plugin_ttrss_enabled,
+    },
 ]);
 
 // filter disabled global endpoints

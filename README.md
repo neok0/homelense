@@ -67,6 +67,7 @@ Currently supported search plugins:
 - Karakeep
 - Mealie
 - Notion
+- TinyTinyRSS
 - Custom
 
 More plugins will be added in future versions.
