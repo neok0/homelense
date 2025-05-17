@@ -24,9 +24,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     search_paperless_ngx_api_url: process.env.NUXT_SEARCH_PAPERLESS_NGX_API_URL,
     search_paperless_ngx_api_token: process.env.NUXT_SEARCH_PAPERLESS_NGX_API_TOKEN,
-    search_ttrss_url: process.env.NUXT_SEARCH_TTRSS_URL,
-    search_ttrss_user: process.env.NUXT_SEARCH_TTRSS_USER,
-    search_ttrss_password: process.env.NUXT_SEARCH_TTRSS_PASSWORD,
+    search_ttrss_api_url: process.env.NUXT_SEARCH_TTRSS_API_URL,
+    search_ttrss_api_user: process.env.NUXT_SEARCH_TTRSS_API_USER,
+    search_ttrss_api_password: process.env.NUXT_SEARCH_TTRSS_API_PASSWORD,
     search_mealie_api_url: process.env.NUXT_SEARCH_MEALIE_API_URL,
     search_mealie_api_token: process.env.NUXT_SEARCH_MEALIE_API_TOKEN,
     search_karakeep_api_url: process.env.NUXT_SEARCH_KARAKEEP_API_URL,
