@@ -7,6 +7,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+const props = defineProps<{
+    showEmpty: boolean;
+}>();
 </script>
 
 <template>
@@ -21,7 +25,8 @@ import {
                 <span>Collaps all</span>
             </DropdownMenuItem>
             <DropdownMenuItem @click="$emit('toggleSearchResultsShowEmpty')">
-                <span>Show Empty</span>
+                <span v-if="props.showEmpty">Hide Empty</span>
+                <span v-else>Show Empty</span>
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
