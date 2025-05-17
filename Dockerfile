@@ -2,7 +2,7 @@
 # see all versions at https://hub.docker.com/r/oven/bun/tags
 FROM oven/bun:1 AS build
 WORKDIR /app
-ARG NUXT_PUBLIC_VERSION='0.1.5'
+ARG NUXT_PUBLIC_VERSION='0.1.6'
 
 COPY ./app/package.json ./app/bun.lock ./
 

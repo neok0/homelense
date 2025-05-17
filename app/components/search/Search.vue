@@ -74,6 +74,7 @@ const endpoints = reactive([
         isSearched: false,
         icon: "/images/icons/tiny-tiny-rss.png",
         enabled: config.public.search_plugin_ttrss_enabled,
+        weight: config.public.search_plugin_ttrss_weight,
     },
 ]);
 
@@ -109,9 +110,12 @@ function toggleAll() {
     expandAll.value = !expandAll.value;
 }
 
-const showEmpty = ref(true);
+const searchOptionShowEmptyResults = useCookie("searchOptionShowEmptyResults") || "true";
+const showEmpty = ref(searchOptionShowEmptyResults.value === "true");
+
 function showEmptyResults() {
     showEmpty.value = !showEmpty.value;
+    searchOptionShowEmptyResults.value = showEmpty.value.toString();
 }
 
 if (props.q) {
@@ -158,6 +162,7 @@ if (props.q) {
                 <SearchResultsOptions
                     @toggleSearchResults="toggleAll()"
                     @toggleSearchResultsShowEmpty="showEmptyResults()"
+                    :showEmpty="showEmpty"
                 />
             </div>
         </div>
@@ -166,8 +171,8 @@ if (props.q) {
             :key="endpoint.title + q"
             :endpoint="endpoint"
             :expanded="expandAll"
-            :showEmpty="showEmpty"
             :q="q"
+            :showEmpty="showEmpty"
         ></SearchResults>
     </div>
 </template>

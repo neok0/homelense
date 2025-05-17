@@ -27,13 +27,13 @@ watch(
 
 const q = ref(props.q);
 const { status, data } = await useFetch(props.endpoint.url, { query: { q: q }, lazy: true });
-
-// toggle to show empty results or not
-const showResults = ref(props.showEmpty);
 </script>
 
-<template v-if="endpoint.isSearched && showEmpty">
-    <div class="grid auto-rows-min gap-4 md:grid-cols-1">
+<template v-if="endpoint.isSearched">
+    <div
+        class="grid auto-rows-min gap-4 md:grid-cols-1"
+        v-if="data.length > 0 || (data.length === 0 && props.showEmpty)"
+    >
         <div class="rounded-xl bg-muted/50 p-4 shadow hover:bg-muted transition-colors">
             <Collapsible v-model:open="isExpanded">
                 <CollapsibleTrigger>
