@@ -1,30 +1,39 @@
-export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig();
+import { fetchJson, getSearchQuery, logSearchError, requireSearchSession } from "../../utils/search";
+import type { SearchResult } from "../../utils/search";
 
-  if (config.public.use_oauth) {
-    const { user } = await requireUserSession(event);
+type PaperlessSearchResponse = {
+  results?: {
+    id: number;
+    title: string;
+  }[];
+};
+
+export default defineEventHandler(async (event): Promise<SearchResult[]> => {
+  const config = useRuntimeConfig();
+  await requireSearchSession(event);
+
+  const searchTerm = getSearchQuery(event);
+  if (!searchTerm) {
+    return [];
   }
-  const query: Record<string, any> = getQuery(event);
-  return fetch(`${config.search_paperless_ngx_api_url}/api/documents/?query=${encodeURIComponent(query.q)}`, {
-    headers: {
-      Authorization: `Token ${config.search_paperless_ngx_api_token}`,
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const results = data.results.map((item: { id: number; title: string }) => ({
-        id: item.id,
-        title: item.title,
-        link: `${config.search_paperless_ngx_api_url}/api/documents/${item.id}/preview/`,
-      }));
-      return results;
-    })
-    .catch((error) => {
-      return [];
-    });
+
+  try {
+    const data = await fetchJson<PaperlessSearchResponse>(
+      `${config.search_paperless_ngx_api_url}/api/documents/?query=${encodeURIComponent(searchTerm)}`,
+      {
+        headers: {
+          Authorization: `Token ${config.search_paperless_ngx_api_token}`,
+        },
+      },
+    );
+
+    return (data.results ?? []).map((item) => ({
+      id: item.id,
+      title: item.title,
+      link: `${config.search_paperless_ngx_api_url}/api/documents/${item.id}/preview/`,
+    }));
+  } catch (error) {
+    logSearchError("Paperless-ngx", error);
+    return [];
+  }
 });

@@ -1,35 +1,40 @@
-export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig();
+import { fetchJson, getSearchQuery, logSearchError, requireSearchSession } from "../../utils/search";
+import type { SearchResult } from "../../utils/search";
 
-  if (config.public.use_oauth) {
-    const { user } = await requireUserSession(event);
+type CustomSearchResponse = {
+  data?: Record<string, unknown>[];
+};
+
+function readStringField(item: Record<string, unknown>, field: string): string {
+  const value = item[field];
+  return typeof value === "string" || typeof value === "number" ? String(value) : "";
+}
+
+export default defineEventHandler(async (event): Promise<SearchResult[]> => {
+  const config = useRuntimeConfig();
+  await requireSearchSession(event);
+
+  const searchTerm = getSearchQuery(event);
+  if (!searchTerm) {
+    return [];
   }
 
-  const query: Record<string, any> = getQuery(event);
-  const url = config.search_custom_api_url.replace("%s", encodeURIComponent(query.q));
-  const headers = {
-    [config.search_custom_api_token_header]: config.search_custom_api_token,
-  };
-  return fetch(`${url}`, {
-    headers,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        console.log("something went wrong");
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const results = data.data.map((item: Record<string, any>) => ({
-        id: item[config.search_custom_item_id_field],
-        title: item[config.search_custom_item_title_field],
-        link: item[config.search_custom_item_link_field],
-      }));
-      return results;
-    })
-    .catch((error) => {
-      console.log(error);
-      return [];
+  try {
+    const url = String(config.search_custom_api_url).replace("%s", encodeURIComponent(searchTerm));
+    const tokenHeader = String(config.search_custom_api_token_header || "Authorization");
+    const data = await fetchJson<CustomSearchResponse>(url, {
+      headers: {
+        [tokenHeader]: String(config.search_custom_api_token || ""),
+      },
     });
+
+    return (data.data ?? []).map((item) => ({
+      id: readStringField(item, config.search_custom_item_id_field),
+      title: readStringField(item, config.search_custom_item_title_field),
+      link: readStringField(item, config.search_custom_item_link_field),
+    }));
+  } catch (error) {
+    logSearchError("Custom", error);
+    return [];
+  }
 });

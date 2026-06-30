@@ -1,20 +1,31 @@
-export default defineEventHandler(async (event) => {
+import { fetchJson, getSearchQuery, logSearchError, requireSearchSession } from "../../utils/search";
+import type { SearchResult } from "../../utils/search";
+
+type TtrssLoginResponse = {
+  content?: {
+    session_id?: string;
+  };
+};
+
+type TtrssHeadlineResponse = {
+  content?: {
+    id: number;
+    title: string;
+    link: string;
+  }[];
+};
+
+export default defineEventHandler(async (event): Promise<SearchResult[]> => {
   const config = useRuntimeConfig();
+  await requireSearchSession(event);
 
-  if (config.public.use_oauth) {
-    const { user } = await requireUserSession(event);
-  }
-
-  const query = getQuery(event);
-  const searchTerm = query.q;
-
+  const searchTerm = getSearchQuery(event);
   if (!searchTerm) {
     return [];
   }
 
   try {
-    // Step 1: Login to get session ID (unless using a permanent one)
-    const loginResponse = await fetch(`${config.search_ttrss_api_url}/api/`, {
+    const loginData = await fetchJson<TtrssLoginResponse>(`${config.search_ttrss_api_url}/api/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,15 +37,12 @@ export default defineEventHandler(async (event) => {
       }),
     });
 
-    const loginData = await loginResponse.json();
-    const sessionId = loginData.content.session_id;
-
+    const sessionId = loginData.content?.session_id;
     if (!sessionId) {
       throw new Error("Failed to get TT-RSS session ID");
     }
 
-    // Step 2: Search for articles
-    const searchResponse = await fetch(`${config.search_ttrss_api_url}/api/`, {
+    const searchData = await fetchJson<TtrssHeadlineResponse>(`${config.search_ttrss_api_url}/api/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +50,7 @@ export default defineEventHandler(async (event) => {
       body: JSON.stringify({
         op: "getHeadlines",
         sid: sessionId,
-        feed_id: -4, // Special feed ID for all articles
+        feed_id: -4,
         search: searchTerm,
         search_mode: "all_feeds",
         limit: 25,
@@ -50,17 +58,13 @@ export default defineEventHandler(async (event) => {
       }),
     });
 
-    const searchData = await searchResponse.json();
-
-    const results = searchData.content.map((item: any) => ({
+    return (searchData.content ?? []).map((item) => ({
       id: item.id,
       title: item.title,
       link: item.link,
     }));
-
-    return results;
   } catch (error) {
-    console.error("TT-RSS search failed:", error);
+    logSearchError("TT-RSS", error);
     return [];
   }
 });

@@ -11,10 +11,12 @@
 </template>
 
 <script setup lang="ts">
+import type { Component } from "vue";
+
 defineProps<{
     to: string;
     label: string;
-    icon: any;
+    icon: Component;
     target?: "_blank" | "_self";
 }>();
 </script>

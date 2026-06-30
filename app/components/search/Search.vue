@@ -76,16 +76,22 @@ const endpoints = reactive([
         enabled: config.public.search_plugin_ttrss_enabled,
         weight: config.public.search_plugin_ttrss_weight,
     },
+    {
+        title: "Custom",
+        url: "/api/search/custom",
+        selected: true,
+        isSearched: false,
+        icon: "/favicon.ico",
+        enabled: config.public.search_plugin_custom_enabled,
+        weight: config.public.search_plugin_custom_weight,
+    },
 ]);
 
 // filter disabled global endpoints
 const enabledEndpoints = computed(() => endpoints.filter((endpoint) => endpoint.enabled));
-const searchedEndpoints = computed(() => {
-    // sort endpoints by weight first
-    enabledEndpoints.value.sort((a, b) => b.weight - a.weight);
-    // filter endpoints that are not searched
-    return enabledEndpoints.value.filter((item) => item.isSearched);
-});
+const searchedEndpoints = computed(() =>
+    [...enabledEndpoints.value].sort((a, b) => b.weight - a.weight).filter((item) => item.isSearched),
+);
 
 function search() {
     if (!searchQuery.value.trim()) {

@@ -1,5 +1,22 @@
 import tailwindcss from "@tailwindcss/vite";
 
+function readBoolean(value: string | undefined, fallback = false) {
+  if (value === undefined) {
+    return fallback;
+  }
+
+  return ["1", "true", "yes", "on"].includes(value.toLowerCase());
+}
+
+function readNumber(value: string | undefined, fallback = 0) {
+  if (value === undefined) {
+    return fallback;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
@@ -44,22 +61,23 @@ export default defineNuxtConfig({
     search_custom_item_link_field: "link",
     public: {
       version: process.env.NUXT_PUBLIC_VERSION,
-      search_plugin_paperless_ngx_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_PAPERLESS_NGX_ENABLED || false,
-      search_plugin_paperless_ngx_weight: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_PAPERLESS_NGX_WEIGHT || 0,
-      search_plugin_ttrss_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_TTRSS_ENABLED || false,
-      search_plugin_ttrss_weight: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_TTRSS_WEIGHT || 0,
-      search_plugin_mealie_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_MEALIE_ENABLED || false,
-      search_plugin_mealie_weight: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_MEALIE_WEIGHT || 0,
-      search_plugin_karakeep_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_KARAKEEP_ENABLED || false,
-      search_plugin_karakeep_weight: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_KARAKEEP_WEIGHT || 0,
-      search_plugin_gitea_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_GITEA_ENABLED || false,
-      search_plugin_gitea_weight: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_GITEA_WEIGHT || 0,
-      search_plugin_jellyfin_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_JELLYFIN_ENABLED || false,
-      search_plugin_jellyfin_weight: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_JELLYFIN_WEIGHT || 0,
-      search_plugin_notion_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_NOTION_ENABLED || false,
-      search_plugin_notion_weight: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_NOTION_WEIGHT || 0,
-      search_plugin_custom_enabled: process.env.NUXT_PUBLIC_SEARCH_PLUGIN_CUSTOM_ENABLED || false,
-      use_oauth: process.env.NUXT_PUBLIC_USE_OAUTH,
+      search_plugin_paperless_ngx_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_PAPERLESS_NGX_ENABLED),
+      search_plugin_paperless_ngx_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_PAPERLESS_NGX_WEIGHT),
+      search_plugin_ttrss_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_TTRSS_ENABLED),
+      search_plugin_ttrss_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_TTRSS_WEIGHT),
+      search_plugin_mealie_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_MEALIE_ENABLED),
+      search_plugin_mealie_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_MEALIE_WEIGHT),
+      search_plugin_karakeep_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_KARAKEEP_ENABLED),
+      search_plugin_karakeep_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_KARAKEEP_WEIGHT),
+      search_plugin_gitea_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_GITEA_ENABLED),
+      search_plugin_gitea_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_GITEA_WEIGHT),
+      search_plugin_jellyfin_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_JELLYFIN_ENABLED),
+      search_plugin_jellyfin_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_JELLYFIN_WEIGHT),
+      search_plugin_notion_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_NOTION_ENABLED),
+      search_plugin_notion_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_NOTION_WEIGHT),
+      search_plugin_custom_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_CUSTOM_ENABLED),
+      search_plugin_custom_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_CUSTOM_WEIGHT),
+      use_oauth: readBoolean(process.env.NUXT_PUBLIC_USE_OAUTH),
       use_oauth_provider_name: process.env.NUXT_PUBLIC_USE_OAUTH_PROVIDER_NAME,
     },
   },

@@ -13,6 +13,7 @@ const props = defineProps<{
         url: string;
         selected: boolean;
         icon: string;
+        isSearched: boolean;
     };
 }>();
 
@@ -26,7 +27,11 @@ watch(
 );
 
 const q = ref(props.q);
-const { status, data } = await useFetch(props.endpoint.url, { query: { q: q }, lazy: true });
+const { status, data } = await useFetch(props.endpoint.url, {
+    query: { q },
+    lazy: true,
+    default: () => [],
+});
 </script>
 
 <template v-if="endpoint.isSearched">
