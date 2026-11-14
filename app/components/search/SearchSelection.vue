@@ -38,7 +38,14 @@ function toggleAll() {
         <DropdownMenuContent class="w-56">
             <DropdownMenuLabel>Apps</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem @click="toggleAll">
+            <DropdownMenuItem
+                @select="
+                    (event) => {
+                        event.preventDefault();
+                        toggleAll();
+                    }
+                "
+            >
                 {{ allSelected ? "Unselect all" : "Select all" }}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
