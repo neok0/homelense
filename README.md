@@ -58,6 +58,11 @@ You can easily enable search plugins via three .env variables:
 NUXT_PUBLIC_SEARCH_PLUGIN_KARAKEEP_ENABLED=true
 NUXT_SEARCH_KARAKEEP_API_URL=https://hoarder.example.de
 NUXT_SEARCH_KARAKEEP_API_TOKEN=<secret token>
+
+# Prowlarr
+NUXT_PUBLIC_SEARCH_PLUGIN_PROWLARR_ENABLED=true
+NUXT_SEARCH_PROWLARR_API_URL=http://prowlarr.example.com:9696
+NUXT_SEARCH_PROWLARR_API_TOKEN=<secret token>
 ```
 
 Currently supported search plugins:
@@ -68,6 +73,7 @@ Currently supported search plugins:
 - Mealie
 - Notion
 - TinyTinyRSS
+- Prowlarr
 - Custom
 
 More plugins will be added in future versions.
