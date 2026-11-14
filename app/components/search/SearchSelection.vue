@@ -1,18 +1,16 @@
 <script lang="ts" setup>
-import type { DropdownMenuCheckboxItemProps } from "reka-ui";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type Checked = DropdownMenuCheckboxItemProps["modelValue"];
-
-defineProps<{
+const props = defineProps<{
     endpoints: {
         title: string;
         url: string;
@@ -21,6 +19,15 @@ defineProps<{
         isActive?: boolean;
     }[];
 }>();
+
+const allSelected = computed(() => props.endpoints.length > 0 && props.endpoints.every((endpoint) => endpoint.selected));
+
+function toggleAll() {
+    const selected = !allSelected.value;
+    props.endpoints.forEach((endpoint) => {
+        endpoint.selected = selected;
+    });
+}
 </script>
 
 <template>
@@ -30,6 +37,10 @@ defineProps<{
         </DropdownMenuTrigger>
         <DropdownMenuContent class="w-56">
             <DropdownMenuLabel>Apps</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem @click="toggleAll">
+                {{ allSelected ? "Unselect all" : "Select all" }}
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuCheckboxItem
                 v-for="endpoint in endpoints"
