@@ -3,7 +3,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { ExternalLink } from "lucide-vue-next";
 defineProps<{
     data: {
-        id: number;
+        id: number | string;
         title: string;
         link: string;
     }[];

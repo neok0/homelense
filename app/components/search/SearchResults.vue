@@ -14,6 +14,7 @@ const props = defineProps<{
         selected: boolean;
         icon: string;
         isSearched: boolean;
+        weight?: number;
     };
 }>();
 
@@ -37,7 +38,7 @@ const { status, data } = await useFetch(props.endpoint.url, {
 <template v-if="endpoint.isSearched">
     <div
         class="grid auto-rows-min gap-4 md:grid-cols-1"
-        v-if="data.length > 0 || (data.length === 0 && props.showEmpty)"
+        v-if="status === 'pending' || data.length > 0 || (status !== 'pending' && props.showEmpty)"
     >
         <div class="rounded-xl bg-muted/50 p-4 shadow hover:bg-muted transition-colors">
             <Collapsible v-model:open="isExpanded">
