@@ -6,6 +6,9 @@ type ProwlarrSearchResult = {
   title?: string;
   infoUrl?: string;
   downloadUrl?: string;
+  categories?: {
+    name?: string;
+  }[];
 };
 
 export default defineEventHandler(async (event): Promise<SearchResult[]> => {
@@ -34,11 +37,17 @@ export default defineEventHandler(async (event): Promise<SearchResult[]> => {
 
     return (Array.isArray(data) ? data : [])
       .filter((item) => item.title && (item.infoUrl || item.guid || item.downloadUrl))
-      .map((item) => ({
-        id: item.guid || item.infoUrl || item.downloadUrl || item.title || "prowlarr-result",
-        title: item.title || "Untitled",
-        link: item.infoUrl || item.guid || item.downloadUrl || "",
-      }));
+      .map((item) => {
+        const categoryNames = (item.categories ?? [])
+          .map((category) => category.name?.trim())
+          .filter((name): name is string => Boolean(name));
+
+        return {
+          id: item.guid || item.infoUrl || item.downloadUrl || item.title || "prowlarr-result",
+          title: `${categoryNames.length > 0 ? `[${categoryNames.join(", ")}] ` : ""}${item.title || "Untitled"}`,
+          link: item.infoUrl || item.guid || item.downloadUrl || "",
+        };
+      });
   } catch (error) {
     logSearchError("Prowlarr", error);
     return [];
