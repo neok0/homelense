@@ -17,7 +17,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.487.0",
-    "nuxt": "^3.21.11",
+    "nuxt": "4.6.4",
     "nuxt-auth-utils": "0.5.20",
     "reka-ui": "^2.11.0",
     "shadcn-nuxt": "2.0.1",
@@ -32,6 +32,9 @@
     "@iconify-json/radix-icons": "^1.2.6",
     "@iconify/vue": "^4.3.0",
     "@nuxtjs/color-mode": "^3.5.2"
+  },
+  "overrides": {
+    "minimatch": "11.0.8"
   },
   "packageManager": "pnpm@10.8.1+sha512.c50088ba998c67b8ca8c99df8a5e02fd2ae2e2b29aaf238feaa9e124248d3f48f9fb6db2424949ff901cffbb5e0f0cc1ad6aedb602cd29450751d11c35023677"
 }
