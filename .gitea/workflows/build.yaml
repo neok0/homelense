@@ -23,7 +23,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{secrets.REGISTRY_URL}}/neok/homelense:latest .
+          VERSION=$(node -p "require('./app/package.json').version")
+          docker build --build-arg NUXT_PUBLIC_VERSION="$VERSION" -t ${{secrets.REGISTRY_URL}}/neok/homelense:latest .
 
       - name: Push Docker Image
         run: |

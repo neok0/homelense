@@ -2,7 +2,7 @@
 # see all versions at https://hub.docker.com/r/oven/bun/tags
 FROM oven/bun:1 AS build
 WORKDIR /app
-ARG NUXT_PUBLIC_VERSION='0.1.8'
+ARG NUXT_PUBLIC_VERSION
 
 COPY ./app/package.json ./app/bun.lock ./
 
@@ -12,7 +12,7 @@ RUN bun install --frozen-lockfile --ignore-scripts
 # Copy the entire project
 COPY ./app/ ./
 
-RUN bun --bun run build
+RUN NUXT_PUBLIC_VERSION="${NUXT_PUBLIC_VERSION}" bun --bun run build
 
 # copy production dependencies and source code into final image
 FROM oven/bun:1 AS production
