@@ -45,7 +45,7 @@ export default defineEventHandler(async (event): Promise<SearchResult[]> => {
         return {
           id: item.guid || item.infoUrl || item.downloadUrl || item.title || "prowlarr-result",
           title: `${categoryNames.length > 0 ? `[${categoryNames.join(", ")}] ` : ""}${item.title || "Untitled"}`,
-          link: item.infoUrl || item.guid || item.downloadUrl || "",
+          link: item.downloadUrl || item.guid || item.infoUrl || "",
         };
       });
   } catch (error) {
