@@ -77,6 +77,15 @@ const endpoints = reactive([
         weight: config.public.search_plugin_ttrss_weight,
     },
     {
+        title: "Prowlarr",
+        url: "/api/search/prowlarr",
+        selected: true,
+        isSearched: false,
+        icon: "/images/icons/prowlarr.svg",
+        enabled: config.public.search_plugin_prowlarr_enabled,
+        weight: config.public.search_plugin_prowlarr_weight,
+    },
+    {
         title: "Custom",
         url: "/api/search/custom",
         selected: true,
