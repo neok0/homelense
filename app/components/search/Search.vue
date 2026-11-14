@@ -2,10 +2,10 @@
 import SearchResults from "@/components/search/SearchResults.vue";
 import { ref } from "vue";
 
-const props = defineProps({
-    q: String,
-    endpoints: Array<String>,
-});
+const props = defineProps<{
+    q?: string;
+    endpoints?: string[];
+}>();
 
 const searchQuery = ref("");
 const q = ref("");
@@ -125,10 +125,10 @@ function showEmptyResults() {
 }
 
 if (props.q) {
-    if (props.endpoints && props.endpoints.length > 0) {
+    if (props.endpoints?.length) {
         // user specified endpoints via get parameter
         endpoints.forEach((endpoint) => {
-            if (props.endpoints && props.endpoints.includes(endpoint.title.toLowerCase())) {
+            if (props.endpoints.includes(endpoint.title.toLowerCase())) {
                 endpoint.selected = true;
             } else {
                 endpoint.selected = false;

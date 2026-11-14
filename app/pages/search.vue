@@ -19,12 +19,10 @@ definePageMeta({
 });
 
 const route = useRoute();
-const q = computed(() => {
-    return route.query.q;
-});
+const q = computed(() => (typeof route.query.q === "string" ? route.query.q : undefined));
 const endpoints = computed(() => {
-    const m = route.query.m;
-    return Array.isArray(m) ? m : m ? [m] : [];
+    const values = Array.isArray(route.query.m) ? route.query.m : [route.query.m];
+    return values.filter((value): value is string => typeof value === "string");
 });
 </script>
 

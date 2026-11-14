@@ -15,6 +15,9 @@ export async function requireSearchSession(event: H3Event) {
   }
 }
 
+const MAX_SEARCH_QUERY_LENGTH = 200;
+const UPSTREAM_TIMEOUT_MS = 10_000;
+
 export function getSearchQuery(event: H3Event): string | null {
   const query = getQuery(event);
   const searchTerm = Array.isArray(query.q) ? query.q[0] : query.q;
@@ -24,11 +27,14 @@ export function getSearchQuery(event: H3Event): string | null {
   }
 
   const trimmed = searchTerm.trim();
-  return trimmed.length > 0 ? trimmed : null;
+  return trimmed.length > 0 && trimmed.length <= MAX_SEARCH_QUERY_LENGTH ? trimmed : null;
 }
 
-export async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, init);
+export async function fetchJson<T>(url: string, init: RequestInit = {}): Promise<T> {
+  const response = await fetch(url, {
+    ...init,
+    signal: init.signal ?? AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+  });
 
   if (!response.ok) {
     throw createError({
