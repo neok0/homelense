@@ -28,9 +28,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from tag
-        id: extract_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_ENV"
+      - name: Read application version
+        run: |
+          VERSION=$(node -p "require('./app/package.json').version")
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          test "$VERSION" = "$TAG_VERSION" || {
+            echo "Tag version ($TAG_VERSION) does not match app/package.json ($VERSION)"
+            exit 1
+          }
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -43,6 +49,7 @@ jobs:
         with:
           context: .
           push: true
+          build-args: NUXT_PUBLIC_VERSION=${{ env.VERSION }}
           tags: |
             ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
             ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

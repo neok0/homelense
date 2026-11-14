@@ -1,4 +1,5 @@
 import tailwindcss from "@tailwindcss/vite";
+import packageJson from "./package.json";
 
 function readBoolean(value: string | undefined, fallback = false) {
   if (value === undefined) {
@@ -60,7 +61,7 @@ export default defineNuxtConfig({
     search_custom_item_title_field: "title",
     search_custom_item_link_field: "link",
     public: {
-      version: process.env.NUXT_PUBLIC_VERSION,
+      version: process.env.NUXT_PUBLIC_VERSION || packageJson.version,
       search_plugin_paperless_ngx_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_PAPERLESS_NGX_ENABLED),
       search_plugin_paperless_ngx_weight: readNumber(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_PAPERLESS_NGX_WEIGHT),
       search_plugin_ttrss_enabled: readBoolean(process.env.NUXT_PUBLIC_SEARCH_PLUGIN_TTRSS_ENABLED),
